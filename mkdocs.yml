@@ -1,0 +1,45 @@
+edit_uri: https://brunobotelhobr.github.io/My-Python-Template//docs
+extra:
+  version:
+    provider: mike
+extra_css:
+- css/extra.css
+markdown_extensions:
+- attr_list
+- pymdownx.superfences:
+    custom_fences:
+    - class: mermaid
+      name: mermaid
+nav:
+- Home: index.md
+- Install: install.md
+- Manual: manual.md
+- FAQ: faq.md
+- How to Contribute: how-to-guides.md
+- Code: code.md
+plugins:
+- mkdocstrings: null
+- mike:
+    version_selector: true
+repo_name: My-Python-Template
+repo_url: https://github.com/brunobotelhobr/My-Python-Template
+site_author: Bruno Botelho <bruno.botelho.br@gmail.com>
+site_description: ''
+site_name: app
+site_url: https://brunobotelhobr.github.io/My-Python-Template/
+theme:
+  custom_dir: docs/overwrites
+  favicon: assets/logo.png
+  logo: assets/logo.png
+  name: material
+  palette:
+  - scheme: default
+    toggle:
+      icon: material/brightness-7
+      name: Switch to dark mode
+  - scheme: slate
+    toggle:
+      icon: material/brightness-4
+      name: Switch to light mode
+watch:
+- src
