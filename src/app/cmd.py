@@ -64,17 +64,16 @@ def val(
     if Validator(address=address, version=address_version).validate() is False:
         Printer().error(name="address", value=address, message="Invalid address")
         return False
-    else:
-        in_format: str = "hex"
-        if address_version == 4:
-            in_format = "dec"
-        # Convert the address to the output format
-        address = Conversor(
-            address=address, version=address_version, in_format=in_format, out_format=output  # type: ignore
-        ).convert()
-        # Print the address
-        Printer().address(address=address, version=address_version)
-        return True
+    in_format: str = "hex"
+    if address_version == 4:
+        in_format = "dec"
+    # Convert the address to the output format
+    address = Conversor(
+        address=address, version=address_version, in_format=in_format, out_format=output  # type: ignore
+    ).convert()
+    # Print the address
+    Printer().address(address=address, version=address_version)
+    return True
 
 
 @cmd.command()

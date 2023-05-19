@@ -85,6 +85,7 @@ disable = [
     "R0912",  # Too many branches (too-many-branches)
     "R0913",  # Too many arguments (too-many-arguments)
     "R0914",  # Too many local variables (too-many-locals)
+    "R0915",  # Too many statements (too-many-statements)
 ]
 [tool.pylint.BASIC]
 good-names = ["a", "b", "c", "i", "k", "k"]
