@@ -5,7 +5,7 @@
 ![GitHub Action CI](https://github.com/brunobotelhobr/My-IP-Calculator/actions/workflows/ci.yml/badge.svg?branch=main)
 ![GitHub Action CodeQL](https://github.com/brunobotelhobr/My-IP-Calculator/actions/workflows/codeql.yml/badge.svg?branch=main)
 ![GitHub Action Trivy](https://github.com/brunobotelhobr/My-IP-Calculator/actions/workflows/trivy.yml/badge.svg?branch=main)
-[![codecov](https://codecov.io/gh/brunobotelhobr/My-IP-Calculator/branch/main/graph/badge.svg?token=EPMON2XJW2)](https://codecov.io/gh/brunobotelhobr/My-IP-Calculator)
+[![codecov](https://codecov.io/gh/brunobotelhobr/My-IP-Calculator/branch/main/graph/badge.svg?token=58zkdUzWkh)](https://codecov.io/gh/brunobotelhobr/My-IP-Calculator)
 
 **This an IP address calculator.**
 

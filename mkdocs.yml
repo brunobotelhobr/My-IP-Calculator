@@ -12,11 +12,9 @@ markdown_extensions:
       name: mermaid
 nav:
 - Home: index.md
-- Install: install.md
 - Manual: manual.md
 - FAQ: faq.md
 - How to Contribute: how-to-guides.md
-- Code: code.md
 plugins:
 - mkdocstrings: null
 - mike:

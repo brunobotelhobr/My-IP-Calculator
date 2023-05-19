@@ -11,7 +11,9 @@ flowchart
     tests --> integral
 ```
 
-On `docs` directory, you can find all the documentation of the project. The documentation is made with [mkdocs](https://www.mkdocs.org/). To run the documentation, you must run the command `mkdocs serve` on the root of the project.
+On `docs` directory, you can find all the documentation of the project. 
+The documentation is made with [mkdocs](https://www.mkdocs.org/). 
+To run the documentation, you must run the command `task docs` on the root of the project.
 
 On `src` directory, you can find the source code of the project.
 - calc.py: contains all the functions of the project
@@ -23,9 +25,9 @@ On `tests` directory, you can find all the tests of the project. The tests are d
 - integral: tests that test the entire application
 
 ### calc.py
-As this is a template, the calc.py file contains the functions, the main idea is generate provide an exmaple of file that contains the functions of the project that will be used as dependencies for the main.py app.
+The calc.py file contains the functions and classes to do the calculation.
 
-### main.py
+### cmd.py
 The cli is build using [Typer](https://typer.tiangolo.com/), on this link you can get more information about how to build a cli using this library.
 
 ### test
