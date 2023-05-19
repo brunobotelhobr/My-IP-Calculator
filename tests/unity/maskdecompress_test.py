@@ -1,4 +1,4 @@
-"""MaskDecompress unit tests."""
+"""Tests to the MaskDecompress module."""
 import pytest
 
 from app.calc import MaskDecompress

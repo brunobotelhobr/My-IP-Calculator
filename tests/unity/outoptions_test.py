@@ -1,8 +1,7 @@
-"""OutputOptions enum tests."""
+"""Tests to the OutputOptions module."""
 from app.calc import OutputOptions
 
 
-# Test OutputOptions
 def test_output_options_bin() -> None:
     """Test OutputOptions.BIN."""
     assert OutputOptions.BIN == "bin"

@@ -1,20 +1,52 @@
 # My-Python-Template
 
-![Icon](https://brunobotelhobr.github.io/My-Template-Python/0.0.1/assets/logo.png)
+![Icon](https://brunobotelhobr.github.io/My-IP-Calculator/0.0.1/assets/logo.png)
 
-![GitHub Action CI](https://github.com/brunobotelhobr/My-Template-Python/actions/workflows/ci.yml/badge.svg?branch=main)
-![GitHub Action CodeQL](https://github.com/brunobotelhobr/My-Template-Python/actions/workflows/codeql.yml/badge.svg?branch=main)
-![GitHub Action Trivy](https://github.com/brunobotelhobr/My-Template-Python/actions/workflows/trivy.yml/badge.svg?branch=main)
-[![codecov](https://codecov.io/gh/brunobotelhobr/My-Template-Python/branch/main/graph/badge.svg?token=EPMON2XJW2)](https://codecov.io/gh/brunobotelhobr/My-Template-Python)
+![GitHub Action CI](https://github.com/brunobotelhobr/My-IP-Calculator/actions/workflows/ci.yml/badge.svg?branch=main)
+![GitHub Action CodeQL](https://github.com/brunobotelhobr/My-IP-Calculator/actions/workflows/codeql.yml/badge.svg?branch=main)
+![GitHub Action Trivy](https://github.com/brunobotelhobr/My-IP-Calculator/actions/workflows/trivy.yml/badge.svg?branch=main)
+[![codecov](https://codecov.io/gh/brunobotelhobr/My-IP-Calculator/branch/main/graph/badge.svg?token=EPMON2XJW2)](https://codecov.io/gh/brunobotelhobr/My-IP-Calculator)
 
-This is a template repository for Python projects. 
+**This an IP address calculator.**
 
+I'm a savy Cyber security professional, and the propose of this code is provide and an example and also incentivate my graduation students to develop tools and scripts in python to do defensive or ofensive security tasks.
+
+Features:
+
+ - Works with IPv6 and IPv4.
+ - Convert address to decimal, hexadecimal and bnary form.
+ - Valdiate addresses
+ - Calculate nets (Broadcast, Network ID and avaliable host address)
+ - Calculate Subnets
+
+## Demo
+
+
+
+
+
+## Install
+You can use this tool in many ways:
+
+### Install from Repository
+
+
+### Run in Container
+
+
+### Build from Source Code
+
+
+
+
+
+## About this code
 It uses Poetry for dependency management and includes pre-configured tools such as black, flake8, mypy, pylint, pytest, and others, for formatting, linting, testing, and documentation management. 
 The project also includes security tools like trivy and bandit. 
 
 The pyproject.toml file contains various configurations like project metadata, dependencies, build system, and commands for release and documentation management.
 
-To have more details, check the [Documentation](https://brunobotelhobr.github.io/My-Template-Python/)
+To have more details, check the [Documentation](https://brunobotelhobr.github.io/My-IP-Calculator/)
 
 ## Features
 - Project Management
@@ -109,7 +141,7 @@ Be sure you have installed all the requirements and that you on the desired pyth
 ## Setup
 ```shell
 # Clone the repository
-git clone https://github.com/brunobotelhobr/My-Template=Python.git
+git clone https://github.com/brunobotelhobr/My-IP-Calculator.git
 
 # Check the python version, you must use the version that the project will use.
 python -V
@@ -191,6 +223,6 @@ Whether it's bug fixes, new features, or documentation improvements, we welcome 
 Please read our documentation for guidelines on how to contribute. 
 Happy coding!
 
-check the [Documentation](https://brunobotelhobr.github.io/My-Template-Python/) for more details.
+check the [Documentation](https://brunobotelhobr.github.io/My-IP-Calculator/) for more details.
 
 [!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/brunobotelhobr)

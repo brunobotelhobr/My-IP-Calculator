@@ -1,6 +1,6 @@
 [tool.poetry]
-name = "my-ip-calc"
-version = "0.0.1"
+name = "my-ip-calulator"
+version = "0.0.2"
 license = "MIT"
 description = "This is an IPv4 and IPv6 calculator. It can validate IP address, convert then and also do net and subnet calculations."
 authors = ["Bruno Botelho <bruno.botelho.br@gmail.com>"]
@@ -9,7 +9,10 @@ readme = "README.md"
 packages = [{include = "app", from = "src"}]
 repository = "https://github.com/brunobotelhobr/My-IP-Calculator"
 homepage = "https://brunobotelhobr.github.io/My-IP-Calculator"
-keywords = ["python"]
+keywords = ["ip", "calculator", "ipv4", "ipv6", "net", "subnet", "cidr", "mask", "address", "convert", "validate"]
+
+[tool.poetry.scripts]
+my-ip-calculator = "app.cmd:cmd"
 
 [tool.poetry.dependencies]
 python = "^3.10"

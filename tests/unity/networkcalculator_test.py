@@ -1,10 +1,11 @@
-"""NetworkCalculator test module."""
+"""Tests to the NetworkCalculator module."""
 import pytest
 
 from app.calc import NetworkCalculator
 
 
-def test_networkcalculator_v4_network() -> None:
+# Happy path
+def test_networkcalculator_net_v4_happy() -> None:
     """Test NetworkCalculator class for IPv4 network."""
     assert NetworkCalculator(address="10.10.10.10", mask="255.255.255.255", version=4).network() == "10.10.10.10"
     assert NetworkCalculator(address="10.10.10.10", mask="255.255.255.0", version=4).network() == "10.10.10.0"
@@ -13,7 +14,7 @@ def test_networkcalculator_v4_network() -> None:
     assert NetworkCalculator(address="10.10.10.10", mask="0.0.0.0", version=4).network() == "0.0.0.0"
 
 
-def test_networkcalculator_v6_network() -> None:
+def test_networkcalculator_net_v6_happy() -> None:
     """Test NetworkCalculator class for IPv6 network."""
     assert (
         NetworkCalculator(
@@ -53,7 +54,7 @@ def test_networkcalculator_v6_network() -> None:
     )
 
 
-def test_networkcalculator_v4_broadcast() -> None:
+def test_networkcalculator_broadcast_v4_happy() -> None:
     """Test NetworkCalculator class for IPv4 broadcast."""
     assert NetworkCalculator(address="10.10.10.10", mask="255.255.255.255", version=4).broadcast() == "10.10.10.10"
     assert NetworkCalculator(address="10.10.10.10", mask="255.255.255.0", version=4).broadcast() == "10.10.10.255"
@@ -62,7 +63,7 @@ def test_networkcalculator_v4_broadcast() -> None:
     assert NetworkCalculator(address="10.10.10.10", mask="0.0.0.0", version=4).broadcast() == "255.255.255.255"
 
 
-def test_networkcalculator_v6_broadcast() -> None:
+def test_networkcalculator_broadcast_v6_happy() -> None:
     """Test NetworkCalculator class for IPv6 broadcast."""
     assert (
         NetworkCalculator(
@@ -102,7 +103,7 @@ def test_networkcalculator_v6_broadcast() -> None:
     )
 
 
-def test_networkcalculator_v4_hosts() -> None:
+def test_networkcalculator_hosts_v4_happy() -> None:
     """Test NetworkCalculator class for IPv4 hosts."""
     assert NetworkCalculator(address="10.10.10.10", mask="255.255.255.255", version=4).hosts() == 0
     assert NetworkCalculator(address="10.10.10.10", mask="255.255.255.0", version=4).hosts() == 254
@@ -111,7 +112,7 @@ def test_networkcalculator_v4_hosts() -> None:
     assert NetworkCalculator(address="10.10.10.10", mask="0.0.0.0", version=4).hosts() == 4294967294
 
 
-def test_networkcalculator_v6_hosts() -> None:
+def test_networkcalculator_hosts_v6_happy() -> None:
     """Test NetworkCalculator class for IPv6 hosts."""
     assert (
         NetworkCalculator(address="1:2:3:4:5:6:7:8", mask="ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff", version=6).hosts()
@@ -139,18 +140,19 @@ def test_networkcalculator_v6_hosts() -> None:
     )
 
 
-def test_networkcalculator_v4_next() -> None:
+def test_networkcalculator_next_v4_happy() -> None:
     """Test NetworkCalculator class for IPv4 next."""
     assert NetworkCalculator(address="1.2.3.4", mask="255.255.255.255", version=4).next() == "1.2.3.5"
     assert NetworkCalculator(address="1.2.3.255", mask="255.255.255.255", version=4).next() == "1.2.4.0"
     assert NetworkCalculator(address="1.2.255.255", mask="255.255.255", version=4).next() == "1.3.0.0"
     assert NetworkCalculator(address="1.255.255.255", mask="255.255.255.255", version=4).next() == "2.0.0.0"
     assert NetworkCalculator(address="254.255.255.255", mask="255.255.255.255", version=4).next() == "255.0.0.0"
+    # Last address
     with pytest.raises(ValueError):
         assert NetworkCalculator(address="255.255.255.255", mask="255.255.255.255", version=4).next()
 
 
-def test_networkcalculator_v6_next() -> None:
+def test_networkcalculator_next_v6_happy() -> None:
     """Test NetworkCalculator class for IPv6 next."""
     assert (
         NetworkCalculator(address="1:2:3:4:5:6:7:8", mask="ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff", version=6).next()

@@ -1,4 +1,4 @@
-"""Network test module."""
+"""Tests to the Network module."""
 from app.calc import Network
 
 

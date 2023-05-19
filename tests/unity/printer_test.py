@@ -1,7 +1,8 @@
-"""Printer test module."""
+"""Tests to the Printer module."""
 from app.calc import Network, Printer
 
 
+# Happy path
 def test_address() -> None:
     """Test address method."""
     printer = Printer()

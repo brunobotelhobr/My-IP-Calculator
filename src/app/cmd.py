@@ -22,20 +22,20 @@ cmd = typer.Typer(no_args_is_help=True)
 @cmd.command()
 def version() -> str:
     """Show version."""
-    app_version: str = "0.0.1"
+    app_version: str = "0.0.2"
     typer.echo(app_version)
     return app_version
 
 
 @cmd.command()
-def validate(
+def val(
     address: Annotated[str, typer.Argument(..., help="IP address, it supports IPv4 and IPv6")],
     output: Annotated[
         Optional[OutputOptions],
         typer.Option(
             "-o",
             "--output",
-            help="Output format for the network address details of an IP address, it supports bin, hex, dec",
+            help="Output format for the network address details of an IP address, it supports bin, hex, dec.",
             case_sensitive=False,
             show_choices=True,
         ),
@@ -73,7 +73,7 @@ def validate(
     if Validator(address=address, version=address_version).validate():
         # Convert the address to the output format
         address = Conversor(
-            address=address, version=address_version, in_format=in_format, out_format=str(output)
+            address=address, version=address_version, in_format=in_format, out_format=output  # type: ignore
         ).convert()
         # Print the address
         Printer().address(address=address, version=address_version)
@@ -84,19 +84,21 @@ def validate(
 
 
 @cmd.command()
-def calculate(  # type: ignore
-    address: Annotated[str, typer.Argument(..., help="IP address, it supports IPv4 and IPv6")],
+def net(  # type: ignore
+    address: Annotated[str, typer.Argument(..., help="IP address, it supports IPv4 and IPv6.")],
     output: Annotated[
         Optional[OutputOptions],
         typer.Option(
             "-o",
             "--output",
-            help="Output format for the network address details of an IP address, it supports bin, hex, dec",
+            help="Output format for the network address details of an IP address, it supports bin, hex, dec.",
             case_sensitive=False,
             show_choices=True,
         ),
     ] = None,
-    mask: Annotated[Optional[str], typer.Argument(help="IP address mask")] = None,
+    mask: Annotated[
+        Optional[str], typer.Argument(help="IP address mask, if not provided an auto generated one will be assigned.")
+    ] = None,
 ) -> bool:
     """Calculate the network address from an IP address and a subnet mask, output the address in the desired format."""
     # Identify the address type
@@ -163,12 +165,12 @@ def calculate(  # type: ignore
     network: str = NetworkCalculator(address=address, mask=mask, version=address_version).network()
     hosts: int = NetworkCalculator(address=address, mask=mask, version=address_version).hosts()
     # Convert the address to the output format
-    address = Conversor(address=address, version=address_version, in_format=in_format, out_format=str(output)).convert()
-    mask = Conversor(address=mask, version=address_version, in_format=in_format, out_format=str(output)).convert()
+    address = Conversor(address=address, version=address_version, in_format=in_format, out_format=output).convert()  # type: ignore
+    mask = Conversor(address=mask, version=address_version, in_format=in_format, out_format=output).convert()  # type: ignore
     broadcast = Conversor(
-        address=broadcast, version=address_version, in_format=in_format, out_format=str(output)
+        address=broadcast, version=address_version, in_format=in_format, out_format=output  # type: ignore
     ).convert()
-    network = Conversor(address=network, version=address_version, in_format=in_format, out_format=str(output)).convert()
+    network = Conversor(address=network, version=address_version, in_format=in_format, out_format=output).convert()  # type: ignore
     # Print the address
     Printer().network(
         version=address_version, address=address, mask=mask, broadcast=broadcast, network=network, hosts=str(hosts)
@@ -178,15 +180,15 @@ def calculate(  # type: ignore
 
 @cmd.command()
 def subnet(  # type: ignore
-    address: Annotated[str, typer.Argument(..., help="IP address, it supports IPv4 and IPv6")],
-    mask: Annotated[str, typer.Argument(help="IP address mask")],
-    parts: Annotated[int, typer.Argument(help="Split the netork in x parts")],
+    address: Annotated[str, typer.Argument(..., help="IP address, it supports IPv4 and IPv6.")],
+    mask: Annotated[str, typer.Argument(help="IP address mask.")],
+    parts: Annotated[int, typer.Argument(help="Split the netork into this parts.")],
     output: Annotated[
         Optional[str],
         typer.Option(
             "-o",
             "--output",
-            help="Output format for the network address details of an IP address, it supports bin, hex, dec",
+            help="Output format for the network address details of an IP address, it supports bin, hex, dec.",
             case_sensitive=False,
             show_choices=True,
         ),

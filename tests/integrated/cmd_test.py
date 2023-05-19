@@ -1,7 +1,7 @@
-"""Test the main cmd object."""
+"""Tests to the cmd module."""
 import typer
 
-from app.main import cmd
+from app.cmd import cmd
 
 
 def test_cmd() -> None:

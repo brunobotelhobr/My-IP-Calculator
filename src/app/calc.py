@@ -17,9 +17,7 @@ class OutputOptions(str, Enum):
 class Network:
     """Network Representation."""
 
-    def __init__(
-        self, version: int, network: str, mask: str, broadcast: str, hosts: str
-    ) -> None:
+    def __init__(self, version: int, network: str, mask: str, broadcast: str, hosts: str) -> None:
         """Initialize the network."""
         self.version: int = version
         self.network: str = network
