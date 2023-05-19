@@ -20,7 +20,7 @@ Features:
  - Calculate Subnets
 
 ## Demo
-[![asciicast](https://asciinema.org/a/585954.svg)](https://asciinema.org/a/585954)
+<script async id="asciicast-585954" src="https://asciinema.org/a/585954.js"></script>
 
 ## Install
 You can use this tool in many ways:
@@ -31,7 +31,7 @@ With this command:
 pip install my-ip-calculator
 ````
 
-[![asciicast](https://asciinema.org/a/585935.svg)](https://asciinema.org/a/585935)
+<script async id="asciicast-585935" src="https://asciinema.org/a/585935.js"></script>
 
 ### Run in Container
 With this commands:
@@ -40,7 +40,7 @@ docker push brunobotelhobr/my-ip-calulator:latest
 docker run --rm brunobotelhobr/my-ip-calulator:latest
 ````
 
-[![asciicast](https://asciinema.org/a/585942.svg)](https://asciinema.org/a/585942)
+<script async id="asciicast-585942" src="https://asciinema.org/a/585942.js"></script>
 
 ### Build from Source Code
 You mus have python installed.
@@ -60,7 +60,7 @@ task test
 python src/app/cmd.py
 ````
 
-[![asciicast](https://asciinema.org/a/585958.svg)](https://asciinema.org/a/585958)
+<script async id="asciicast-585958" src="https://asciinema.org/a/585958.js"></script>
 
 ## How to use
 General:
