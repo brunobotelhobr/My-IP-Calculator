@@ -18,6 +18,7 @@ def test_net_happy() -> None:
     assert net(address="1:2:3:4:5:6:7:8", mask="1:2:3::") is True
     assert net(address="1:2:3:4:5:6:7:8", mask="ffff:ffff:ffff:ffff::") is True
     assert net(address="1:2:3:4:5:6:7:8", mask="ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff") is True
+    assert net(address="12:A:Z::", mask="ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff") is False
 
 
 def test_net_unhappy() -> None:

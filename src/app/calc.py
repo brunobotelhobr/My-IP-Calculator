@@ -137,10 +137,13 @@ class Validator:
         if len(parts) != 8:
             return False
         # Check if each part is between 0 and FFFF
-        for part in parts:
-            if not 0 <= int(part, 16) <= int("FFFF", 16):
-                int(part, 16)
-                return False
+        try:
+            for part in parts:
+                if not 0 <= int(part, 16) <= int("FFFF", 16):
+                    int(part, 16)
+                    return False
+        except ValueError:
+            return False
         # Return True if all checks passed
         return True
 
