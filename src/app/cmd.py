@@ -14,6 +14,8 @@ from app.calc import (
     OutputOptions,
     Printer,
     Validator,
+    discover_format,
+    discover_version,
 )
 
 cmd = typer.Typer(no_args_is_help=True)
@@ -43,34 +45,29 @@ def val(
 ) -> bool:
     """Validate an IPv4 ou IPv6 address, output the address in the desired format."""
     # Identify the address type
-    address_version = 0
-    in_format: str = ""
-    if "." in address:
-        address_version = 4
-        # Default input format
-        in_format = "dec"
-        if output is None:
-            # Set default output format
-            output = "dec"  # type: ignore
-    if ":" in address:
-        address_version = 6
-        # Default input format
-        in_format = "hex"
-        # Expand the address
-        try:
-            address = Validator(address=address, version=6).expand_v6()
-        except ValueError:
-            # Return False if the address is invalid
-            Printer().error(name="address", value=address, message="Invalid address")
-            return False
-        if output is None:
-            # Set default output format
-            output = "hex"  # type: ignore
+    address_version: int = discover_version(address=address)
+    # Return False if the address is invalid
     if address_version not in [4, 6]:
         Printer().error(name="address", value=address, message="Invalid address")
         return False
-    # Validate the address
-    if Validator(address=address, version=address_version).validate():
+    # Set default output format
+    if output is None:
+        output = discover_format(version=address_version)  # type: ignore
+    # Exapand the address if it is IPv6
+    if address_version == 6:
+        try:
+            address = Validator(address=address, version=address_version).expand_v6()
+        except ValueError:
+            Printer().error(name="address", value=address, message="Invalid address")
+            return False
+    # Validate the Address
+    if Validator(address=address, version=address_version).validate() is False:
+        Printer().error(name="address", value=address, message="Invalid address")
+        return False
+    else:
+        in_format: str = "hex"
+        if address_version == 4:
+            in_format = "dec"
         # Convert the address to the output format
         address = Conversor(
             address=address, version=address_version, in_format=in_format, out_format=output  # type: ignore
@@ -78,9 +75,6 @@ def val(
         # Print the address
         Printer().address(address=address, version=address_version)
         return True
-    # Return False if the address is invalid
-    Printer().error(name="address", value=address, message="Invalid address v4 address")
-    return False
 
 
 @cmd.command()
@@ -102,33 +96,21 @@ def net(  # type: ignore
 ) -> bool:
     """Calculate the network address from an IP address and a subnet mask, output the address in the desired format."""
     # Identify the address type
-    address_version = 0
-    in_format: str = ""
-    if "." in address:
-        address_version = 4
-        # Default input format
-        in_format = "dec"
-        if output is None:
-            # Set default output format
-            output = "dec"  # type: ignore
-    if ":" in address:
-        address_version = 6
-        # Default input format
-        in_format = "hex"
-        # Expand the address
-        try:
-            address = Validator(address=address, version=6).expand_v6()
-        except ValueError:
-            # Return False if the address is invalid
-            Printer().error(name="address", value=address, message="Invalid address")
-            return False
-        if output is None:
-            # Set default output format
-            output = "hex"  # type: ignore
+    address_version: int = discover_version(address=address)
+    # Return False if the address is invalid
     if address_version not in [4, 6]:
-        # Return False if the address is invalid
         Printer().error(name="address", value=address, message="Invalid address")
         return False
+    # Set default output format
+    if output is None:
+        output = discover_format(version=address_version)  # type: ignore
+    # Exapand the address if it is IPv6
+    if address_version == 6:
+        try:
+            address = Validator(address=address, version=address_version).expand_v6()
+        except ValueError:
+            Printer().error(name="address", value=address, message="Invalid address")
+            return False
     # Validate the Address
     if Validator(address=address, version=address_version).validate() is False:
         Printer().error(name="address", value=address, message="Invalid address")
@@ -137,40 +119,46 @@ def net(  # type: ignore
     # If the mask is not provided, generate it
     if mask is None:
         mask = MaskGenerator(address=address, version=address_version).generate()
-    # If the mask is in int format, convert it to a standard mask
+    # Expand the mask if it is in int format
     if ":" not in mask and "." not in mask:
-        try:
-            int(mask)
-        except ValueError:
-            # If the mask is not an int, it is invalid
-            Printer().error(name="mask", value=mask, message="Invalid mask")
-            return False
         try:
             mask = MaskDecompress(mask=mask, version=address_version).decompress()
         except ValueError:
             # If the mask is not an int, it is invalid
             Printer().error(name="mask", value=mask, message="Invalid mask")
             return False
+    # If v6, expand the mask
     if address_version == 6:
         try:
             mask = Validator(address=mask, version=address_version).expand_v6()
         except ValueError:
             Printer().error(name="mask", value=mask, message="Invalid mask")
             return False
+    # Validate the mask
     if Validator(address=mask, version=address_version).validate() is False:
         Printer().error(name="mask", value=mask, message="Invalid mask")
         return False
     # Do the calculation
-    broadcast: str = NetworkCalculator(address=address, mask=mask, version=address_version).broadcast()
-    network: str = NetworkCalculator(address=address, mask=mask, version=address_version).network()
-    hosts: int = NetworkCalculator(address=address, mask=mask, version=address_version).hosts()
+    in_format: str = "dec"
+    if address_version == 6:
+        in_format = "hex"
+    working_net = NetworkCalculator(address=address, mask=mask, version=address_version)
+    broadcast: str = working_net.broadcast()
+    network: str = working_net.network()
+    hosts: int = working_net.hosts()
     # Convert the address to the output format
-    address = Conversor(address=address, version=address_version, in_format=in_format, out_format=output).convert()  # type: ignore
-    mask = Conversor(address=mask, version=address_version, in_format=in_format, out_format=output).convert()  # type: ignore
+    address = Conversor(
+        address=address, version=address_version, in_format=in_format, out_format=output  # type: ignore
+    ).convert()
+    mask = Conversor(
+        address=mask, version=address_version, in_format=in_format, out_format=output  # type: ignore
+    ).convert()
     broadcast = Conversor(
         address=broadcast, version=address_version, in_format=in_format, out_format=output  # type: ignore
     ).convert()
-    network = Conversor(address=network, version=address_version, in_format=in_format, out_format=output).convert()  # type: ignore
+    network = Conversor(
+        address=network, version=address_version, in_format=in_format, out_format=output  # type: ignore
+    ).convert()  # type: ignore
     # Print the address
     Printer().network(
         version=address_version, address=address, mask=mask, broadcast=broadcast, network=network, hosts=str(hosts)
@@ -196,43 +184,47 @@ def subnet(  # type: ignore
 ) -> bool:
     """Split an IP address into network and host parts, output the address in the desired format."""
     # Identify the address type
-    address_version = 0
-    in_format: str = ""
-    if "." in address:
-        address_version = 4
-        # Default input format
-        in_format = "dec"
-        if output is None:  # type: ignore
-            # Set default output format
-            output = "dec"
-    if ":" in address:
-        address_version = 6
-        # Default input format
-        in_format = "hex"
-        # Expand the address
-        address = Validator(address=address, version=6).expand_v6()
-        if output is None:  # type: ignore
-            # Set default output format
-            output = "hex"
-    if address_version == 0:
-        # Return False if the address is invalid
+    address_version: int = discover_version(address=address)
+    # Return False if the address is invalid
+    if address_version not in [4, 6]:
+        Printer().error(name="address", value=address, message="Invalid address")
+        return False
+    # Set default output format
+    if output is None:
+        output = discover_format(version=address_version)  # type: ignore
+    # Exapand the address if it is IPv6
+    if address_version == 6:
+        try:
+            address = Validator(address=address, version=address_version).expand_v6()
+        except ValueError:
+            Printer().error(name="address", value=address, message="Invalid address")
+            return False
+    # Validate the Address
+    if Validator(address=address, version=address_version).validate() is False:
         Printer().error(name="address", value=address, message="Invalid address")
         return False
     # Validate the Mask
-    # If the mask is in int format, convert it to a standard mask
+    # Expand the mask if it is in int format
     if ":" not in mask and "." not in mask:
-        try:
-            int(mask)
-        except ValueError:
-            # If the mask is not an int, it is invalid
-            Printer().error(name="mask", value=mask, message="Invalid mask")
-            return False
         try:
             mask = MaskDecompress(mask=mask, version=address_version).decompress()
         except ValueError:
             # If the mask is not an int, it is invalid
             Printer().error(name="mask", value=mask, message="Invalid mask")
             return False
+    # If v6, expand the mask
+    if address_version == 6:
+        try:
+            mask = Validator(address=mask, version=address_version).expand_v6()
+        except ValueError:
+            Printer().error(name="mask", value=mask, message="Invalid mask")
+            return False
+    # Validate the mask
+    try:
+        Validator(address=mask, version=address_version).validate()
+    except ValueError:
+        Printer().error(name="mask", value=mask, message="Invalid mask")
+        return False
     # Validate the split
     # Validate if the parts are base 2
     if parts < 0:
@@ -251,26 +243,30 @@ def subnet(  # type: ignore
             Printer().error(name="parts", value=str(parts), message="The parts are too big for the mask")
             return False
     # Do the calculation
+    in_format: str = "dec"
+    if address_version == 6:
+        in_format = "hex"
     submask: str = MaskDecompress(mask=str(int(mask) + parts), version=address_version).decompress()
     nets: List[Network] = []
     for _ in range(0, parts):
-        network: str = NetworkCalculator(address=address, mask=submask, version=address_version).network()
-        hosts: int = NetworkCalculator(address=address, mask=submask, version=address_version).hosts()
-        broadcast: str = NetworkCalculator(address=address, mask=submask, version=address_version).broadcast()
+        working_net = NetworkCalculator(address=address, mask=mask, version=address_version)
+        broadcast: str = working_net.broadcast()
+        network: str = working_net.network()
+        hosts: int = working_net.hosts()
         nets.append(
             Network(version=address_version, mask=submask, broadcast=broadcast, network=network, hosts=str(hosts))
         )
         address = NetworkCalculator(address=broadcast, mask=mask, version=address_version).next()
     # Convert the address to the output format
-    for net in nets:
-        net.network = Conversor(
-            address=net.network, version=address_version, in_format=in_format, out_format=str(output)
+    for item in nets:
+        item.network = Conversor(
+            address=item.network, version=address_version, in_format=in_format, out_format=str(output)
         ).convert()
-        net.broadcast = Conversor(
-            address=net.broadcast, version=address_version, in_format=in_format, out_format=str(output)
+        item.broadcast = Conversor(
+            address=item.broadcast, version=address_version, in_format=in_format, out_format=str(output)
         ).convert()
-        net.mask = Conversor(
-            address=net.mask, version=address_version, in_format=in_format, out_format=str(output)
+        item.mask = Conversor(
+            address=item.mask, version=address_version, in_format=in_format, out_format=str(output)
         ).convert()
     Printer().networks(nets=nets)
     return True

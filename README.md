@@ -9,7 +9,7 @@
 
 **This an IP address calculator.**
 
-I'm a savy Cyber security professional, and the propose of this code is provide and an example and also incentivate my graduation students to develop tools and scripts in python to do defensive or ofensive security tasks.
+I'm a savy CyberSecurity professional, and the propose of this code is provide and an example and also incentivate my graduation students to develop tools and scripts in python to do defensive or ofensive security tasks.
 
 Features:
 

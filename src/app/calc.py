@@ -486,3 +486,20 @@ class Conversor:
         if loop == 4:
             return ".".join(octets).upper()
         return ":".join(octets).upper()
+
+
+def discover_version(address: str) -> int:
+    """Discover the version of an IP address."""
+    address_version = 0
+    if "." in address:
+        address_version = 4
+    if ":" in address:
+        address_version = 6
+    return address_version
+
+
+def discover_format(version: int) -> str:
+    """Discover the format of an IP address."""
+    if version == 4:
+        return "dec"
+    return "hex"
