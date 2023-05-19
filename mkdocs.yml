@@ -1,4 +1,4 @@
-edit_uri: https://brunobotelhobr.github.io/My-Python-Template//docs
+edit_uri: https://brunobotelhobr.github.io/My-IP-Calculator/docs
 extra:
   version:
     provider: mike
@@ -21,12 +21,13 @@ plugins:
 - mkdocstrings: null
 - mike:
     version_selector: true
-repo_name: My-Python-Template
-repo_url: https://github.com/brunobotelhobr/My-Python-Template
+repo_name: My-IP-Calculator
+repo_url: https://github.com/brunobotelhobr/My-IP-Calculator
 site_author: Bruno Botelho <bruno.botelho.br@gmail.com>
-site_description: ''
-site_name: app
-site_url: https://brunobotelhobr.github.io/My-Python-Template/
+site_description: This is an IPv4 and IPv6 calculator. It can validate IP address,
+  convert then and also do net and subnet calculations.
+site_name: my-ip-calc
+site_url: https://brunobotelhobr.github.io/My-IP-Calculator
 theme:
   custom_dir: docs/overwrites
   favicon: assets/logo.png

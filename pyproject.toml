@@ -1,20 +1,20 @@
 [tool.poetry]
-name = "app"
+name = "my-ip-calc"
 version = "0.0.1"
 license = "MIT"
-description = ""
+description = "This is an IPv4 and IPv6 calculator. It can validate IP address, convert then and also do net and subnet calculations."
 authors = ["Bruno Botelho <bruno.botelho.br@gmail.com>"]
 maintainers = ["Bruno Botelho <bruno.botelho.br@gmail.com>"]
 readme = "README.md"
 packages = [{include = "app", from = "src"}]
-repository = "https://github.com/brunobotelhobr/My-Python-Template"
-homepage = "https://brunobotelhobr.github.io/My-Python-Template/"
+repository = "https://github.com/brunobotelhobr/My-IP-Calculator"
+homepage = "https://brunobotelhobr.github.io/My-IP-Calculator"
 keywords = ["python"]
 
 [tool.poetry.dependencies]
-python = "^3.11"
-typer = {version = "^0.7.0", extras = ["rich"]}
-importlib-metadata = "^6.6.0"
+python = "^3.10"
+typer = {extras = ["all"], version = "^0.9.0"}
+rich = "^13.3.5"
 
 [tool.poetry.group.dev.dependencies]
 flake8-pyproject = "^1.2.3"
@@ -33,6 +33,7 @@ flake8-bugbear = "^23.3.23"
 flake8-docstrings = "^1.7.0"
 flake8-tidy-imports = "^4.8.0"
 taskipy = "^1.10.4"
+ipython = "^8.13.2"
 
 [tool.poetry.group.docs.dependencies]
 mkdocs-material = "^9.1.6"
@@ -47,11 +48,11 @@ requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.black]
-line_length = 79
+line_length = 120
 ignore = "E203"
 
 [tool.isort]
-line_length = 79
+line_length = 120
 atomic = true
 profile = "black"
 skip_gitignore = true
@@ -60,8 +61,11 @@ skip_gitignore = true
 check = true
 
 [tool.flake8]
-max-line-length = 79
-ignore = []
+max-line-length = 120
+ignore = [
+        "W503",   # W503 line break before binary operator
+        "E203"    # E203 whitespace before ':' - Conlict with black
+]
 per-file-ignores = []
 count = true
 
@@ -69,8 +73,16 @@ count = true
 warn_return_any = true
 ignore_missing_imports = true
 
+
 [tool.pylint]
-max-line-length = 79
+max-line-length = 120
+disable = [ 
+    "R0903",  # Too few public methods (too-few-public-methods)
+    "R0911",  # Too many return statements (too-many-return-statements)"
+    "R0912",  # Too many branches (too-many-branches)
+    "R0913",  # Too many arguments (too-many-arguments)
+    "R0914",  # Too many local variables (too-many-locals)
+]
 [tool.pylint.BASIC]
 good-names = ["a", "b", "c", "i", "k", "k"]
 [tool.pylint.'MESSAGES CONTROL']
@@ -83,14 +95,19 @@ skips = []
 [tool.taskipy.settings]
 use_vars = true
 
-[tool.pytest.ini_options]
+[tool.pytest]
 addopts = "--cov --cov-report term-missing"
+testpaths = "tests"
+[tool.pytest.ini_options]
+pythonpath = [
+  "src"
+]
 
 [tool.taskipy.variables]
 src_dir = "src"
 docs_branch = "documentation"
-package_dir = { var = "{src_dir}/app", recursive = true }
-package_name = "app"
+package_dir = { var = "src/app", recursive = true }
+package_name = "my-ip-calc"
 package_version = "0.0.1"
 docker_context = "brunobotelhobr"
 
@@ -101,12 +118,12 @@ pre-release = { cmd = "task pre-commit && task bom && task req &&  task sec", he
 info = { cmd = "poetry env info && poetry check && poetry show", help = "Show project info" }
 meta = { cmd = "python scripts/update-project-properties.py", help = "Update project properties" }
 upgrade = { cmd = "poetry self update && poetry update && task bom && task req", help = "Upgrade all dependencies" }
-sec = { cmd = "trivy fs --exit-code 1 --scanners vuln,config,secret . && bandit -c pyproject.toml -r src && horusec start -p ./src", help = "Run all security checks" }
+sec = { cmd = "trivy fs --exit-code 1 --scanners vuln,config,secret . && bandit -c pyproject.toml -r src && horusec start -D -p ./src", help = "Run all security checks" }
 format = { cmd = "echo 'Running IsSort' && isort --settings-path pyproject.toml src && isort --settings-path pyproject.toml tests && echo 'Running Black' && black --config ./pyproject.toml src && black --config ./pyproject.toml tests  && echo 'Running Autoflake' && autoflake --recursive src && autoflake --recursive tests", help = "Run all formaters" }
 lint = { cmd = "echo 'Running Flake' && flake8 --toml-config pyproject.toml src && flake8 --toml-config pyproject.toml tests && echo 'Running MyPy' && mypy --config-file pyproject.toml src && mypy --config-file pyproject.toml tests && echo 'Running PyLint' &&  pylint --rcfile pyproject.toml src && pylint --rcfile pyproject.toml tests", help = "Run all linters" }
 bom = { cmd = "cyclonedx-py -p --format xml -F -o meta/bom/bom.xml && cyclonedx-py -p --format json -F -o meta/bom/bom.json", help = "Generate BOM" }
 req = { cmd = "poetry export --format requirements.txt > meta/requirements/requirements.txt && echo '-r requirements.txt' > meta/requirements/requirements-dev.txt && poetry export --with dev --format requirements.txt >> meta/requirements/requirements-dev.txt", help = "Generate requirements.txt" }
-test = { cmd = "pytest --cov={package_dir} --cov-report term-missing", help = "Run all tests" }
+test = { cmd = "pytest --cov --cov-report term-missing", help = "Run all tests" }
 pypi-build = { cmd = "poetry build", help = "Build package for PyPI" }
 pypi-auth = { cmd = "echo 'Type PyPI API token:' && read -s PYPI_TOKEN && poetry config pypi-token.pypi $PYPI_TOKEN && unset PYPI_TOKEN", help = "Authenticate to PyPI"}
 pypi-pub = { cmd = "poetry publish", help = "Publish package to PyPI" }
