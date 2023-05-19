@@ -1,4 +1,4 @@
-# My-Python-Template
+# My-IP-Calculator 
 
 ![Icon](https://brunobotelhobr.github.io/My-IP-Calculator/0.0.1/assets/logo.png)
 
@@ -29,10 +29,21 @@ Features:
 You can use this tool in many ways:
 
 ### Install from Repository
+With this command:
+````
+pip install my-ip-calculator
+````
 
+[![asciicast](https://asciinema.org/a/585935.svg)](https://asciinema.org/a/585935)
 
 ### Run in Container
+With this command:
+````
+docker push brunobotelhobr/my-ip-calulator:latest
+docker run --rm brunobotelhobr/my-ip-calulator:latest
+````
 
+[![asciicast](https://asciinema.org/a/585942.svg)](https://asciinema.org/a/585942)
 
 ### Build from Source Code
 
