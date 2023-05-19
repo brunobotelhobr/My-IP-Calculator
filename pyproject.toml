@@ -1,0 +1,149 @@
+[tool.poetry]
+name = "my-ip-calulator"
+version = "0.0.2"
+license = "MIT"
+description = "This is an IPv4 and IPv6 calculator. It can validate IP address, convert then and also do net and subnet calculations."
+authors = ["Bruno Botelho <bruno.botelho.br@gmail.com>"]
+maintainers = ["Bruno Botelho <bruno.botelho.br@gmail.com>"]
+readme = "README.md"
+packages = [{include = "app", from = "src"}]
+repository = "https://github.com/brunobotelhobr/My-IP-Calculator"
+homepage = "https://brunobotelhobr.github.io/My-IP-Calculator"
+keywords = ["ip", "calculator", "ipv4", "ipv6", "net", "subnet", "cidr", "mask", "address", "convert", "validate"]
+
+[tool.poetry.scripts]
+my-ip-calculator = "app.cmd:cmd"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+typer = {extras = ["all"], version = "^0.9.0"}
+rich = "^13.3.5"
+
+[tool.poetry.group.dev.dependencies]
+flake8-pyproject = "^1.2.3"
+black = "^23.3.0"
+isort = "^5.12.0"
+flake8 = "^6.0.0"
+pylint = "^2.17.2"
+pyflakes = "^3.0.1"
+mypy = "^1.2.0"
+autoflake = "^2.1.0"
+pytest = "^7.3.1"
+cyclonedx-bom = "^3.11.0"
+pytest-cov = "^4.0.0"
+bandit = {version = "^1.7.5", extras = ["toml"]}
+flake8-bugbear = "^23.3.23"
+flake8-docstrings = "^1.7.0"
+flake8-tidy-imports = "^4.8.0"
+taskipy = "^1.10.4"
+ipython = "^8.13.2"
+
+[tool.poetry.group.docs.dependencies]
+mkdocs-material = "^9.1.6"
+mkdocs = "^1.4.2"
+mkdocs-material-extensions = "^1.1.1"
+pymdown-extensions = "^9.11"
+mkdocstrings = {version = "^0.21.2", extras = ["python"]}
+mike = "^1.1.2"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line_length = 120
+ignore = "E203"
+
+[tool.isort]
+line_length = 120
+atomic = true
+profile = "black"
+skip_gitignore = true
+
+[tool.autoflake]
+check = true
+
+[tool.flake8]
+max-line-length = 120
+ignore = [
+        "W503",   # W503 line break before binary operator
+        "E203"    # E203 whitespace before ':' - Conlict with black
+]
+per-file-ignores = []
+count = true
+
+[tool.mypy]
+warn_return_any = true
+ignore_missing_imports = true
+
+
+[tool.pylint]
+max-line-length = 120
+disable = [ 
+    "R0903",  # Too few public methods (too-few-public-methods)
+    "R0911",  # Too many return statements (too-many-return-statements)"
+    "R0912",  # Too many branches (too-many-branches)
+    "R0913",  # Too many arguments (too-many-arguments)
+    "R0914",  # Too many local variables (too-many-locals)
+    "R0915",  # Too many statements (too-many-statements)
+]
+[tool.pylint.BASIC]
+good-names = ["a", "b", "c", "i", "k", "k"]
+[tool.pylint.'MESSAGES CONTROL']
+
+[tool.bandit]
+exclude_dirs = ["tests"]
+tests = []
+skips = []
+
+[tool.taskipy.settings]
+use_vars = true
+
+[tool.pytest]
+addopts = "--cov --cov-report term-missing"
+testpaths = "tests"
+[tool.pytest.ini_options]
+pythonpath = [
+  "src"
+]
+
+[tool.taskipy.variables]
+src_dir = "src"
+docs_branch = "documentation"
+package_dir = { var = "src/app", recursive = true }
+package_name = "my-ip-calulator"
+package_version = "0.0.1"
+docker_context = "brunobotelhobr"
+
+[tool.taskipy.tasks]
+pre-commit = { cmd = "task format && task lint && task tests", help = "Run all pre-commit tasks" }
+pre-release = { cmd = "task pre-commit && task bom && task req &&  task sec", help = "Run all pre-release tasks" }
+----------- = "----------------------------------------"
+info = { cmd = "poetry env info && poetry check && poetry show", help = "Show project info" }
+meta = { cmd = "python scripts/update-project-properties.py", help = "Update project properties" }
+upgrade = { cmd = "poetry self update && poetry update && task bom && task req", help = "Upgrade all dependencies" }
+sec = { cmd = "trivy fs --exit-code 1 --scanners vuln,config,secret . && bandit -c pyproject.toml -r src && horusec start -D -p ./src", help = "Run all security checks" }
+format = { cmd = "echo 'Running IsSort' && isort --settings-path pyproject.toml src && isort --settings-path pyproject.toml tests && echo 'Running Black' && black --config ./pyproject.toml src && black --config ./pyproject.toml tests  && echo 'Running Autoflake' && autoflake --recursive src && autoflake --recursive tests", help = "Run all formaters" }
+lint = { cmd = "echo 'Running Flake' && flake8 --toml-config pyproject.toml src && flake8 --toml-config pyproject.toml tests && echo 'Running MyPy' && mypy --config-file pyproject.toml src && mypy --config-file pyproject.toml tests && echo 'Running PyLint' &&  pylint --rcfile pyproject.toml src && pylint --rcfile pyproject.toml tests", help = "Run all linters" }
+bom = { cmd = "cyclonedx-py -p --format xml -F -o meta/bom/bom.xml && cyclonedx-py -p --format json -F -o meta/bom/bom.json", help = "Generate BOM" }
+req = { cmd = "poetry export --format requirements.txt > meta/requirements/requirements.txt && echo '-r requirements.txt' > meta/requirements/requirements-dev.txt && poetry export --with dev --format requirements.txt >> meta/requirements/requirements-dev.txt", help = "Generate requirements.txt" }
+test = { cmd = "pytest --cov --cov-report term-missing", help = "Run all tests" }
+pypi-build = { cmd = "poetry build", help = "Build package for PyPI" }
+pypi-auth = { cmd = "echo 'Type PyPI API token:' && read -s PYPI_TOKEN && poetry config pypi-token.pypi $PYPI_TOKEN && unset PYPI_TOKEN", help = "Authenticate to PyPI"}
+pypi-pub = { cmd = "poetry publish", help = "Publish package to PyPI" }
+docker-list = { cmd = "echo 'Local docker image versions: ' && docker images {docker_context}/{package_name}", help = "List docker images" }
+docker-build = { cmd = "task docker-list && echo 'Type the tag to build:' && read APP_DV && docker build -t {docker_context}/{package_name}:$APP_DV . && unset APP_DV", help = "Build docker image" }
+docker-sec-scan = { cmd = "task docker-list && echo 'Type the tag to scan:' && read APP_DV && trivy image {docker_context}/{package_name}:$APP_DV . && unset APP_DV", help = "Scan a docker image looking for vulenrabilities" }
+docker-auth = { cmd = "docker login", help = "Authenticate to Docker Hub"}
+docker-latest = { cmd = "task docker-list && echo 'Type the tag to tag as latest:' && read APP_DV && docker tag {docker_context}/{package_name}:$APP_DV {docker_context}/{package_name}:latest && unset APP_DV", help = "Tag a docker image as latest" }
+docker-pub = { cmd = "task docker-list && echo 'Type the tag to build:' && read APP_DV && docker push {docker_context}/{package_name}:$APP_DV && unset APP_DV", help = "Publish docker image to Docker Hub" }
+docs = { cmd = "mike serve -b {docs_branch}", help = "Run docs server" }
+docs-list = { cmd = "mike list -b {docs_branch}", help = "List docs versions" }
+docs-build = { cmd = "echo 'Acutal versions: '&& task docs-list && echo 'Type the new version to create:' && read DOCUMENTS_VERSION && mike deploy -b {docs_branch} $DOCUMENTS_VERSION", help = "Add a new version to docs" }
+docs-delete = { cmd = "echo 'Acutal versions: '&& task docs-list && echo 'Type the version to delete:' && read DOCUMENTS_VERSION && mike delete -b {docs_branch} $DOCUMENTS_VERSION && unset DOCUMENTS_VERSION", help = "Delete a version of the docs" }
+docs-latest = { cmd = "echo 'Acutal versions: '&& task docs-list && echo 'Type the version to set as latest:' && read DOCUMENTS_VERSION && mike set-default -b {docs_branch} $DOCUMENTS_VERSION && mike alias -b {docs_branch} -u $DOCUMENTS_VERSION latest && unset DOCUMENTS_VERSION", help = "Set the latest Version." }
+docs-purge = { cmd = "mike delete --all -b {docs_branch}", help = "Purge all versions of the docs." }
+docs-pub = { cmd = "python scripts/update-doc.py {docs_branch}", help = "Publish documentation to the doc branch on GitHub." }
+clean = { cmd = "rm -rf .venv && rm -rf .pytest_cache && rm -rf .coverage && rm -rf dist && rm -rf site && find . -type d -name __pycache__ | xargs rm -rf > /dev/null", help = "Clean all generated files" }
+
+
