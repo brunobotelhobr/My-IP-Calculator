@@ -249,7 +249,7 @@ def subnet(  # type: ignore
     submask: str = MaskDecompress(mask=str(int(mask) + parts), version=address_version).decompress()
     nets: List[Network] = []
     for _ in range(0, parts):
-        working_net = NetworkCalculator(address=address, mask=mask, version=address_version)
+        working_net = NetworkCalculator(address=address, mask=submask, version=address_version)
         broadcast: str = working_net.broadcast()
         network: str = working_net.network()
         hosts: int = working_net.hosts()
