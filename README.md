@@ -60,7 +60,7 @@ task test
 python src/app/cmd.py
 ````
 
-<script async id="asciicast-585958" src="https://asciinema.org/a/585958.js"></script>
+[![asciicast](https://asciinema.org/a/585958.svg)](https://asciinema.org/a/585958)
 
 ## How to use
 General:
