@@ -77,7 +77,7 @@ def val(
 
 
 @cmd.command()
-def net(  # type: ignore
+def net(
     address: Annotated[str, typer.Argument(..., help="IP address, it supports IPv4 and IPv6.")],
     output: Annotated[
         Optional[OutputOptions],
@@ -90,7 +90,7 @@ def net(  # type: ignore
         ),
     ] = None,
     mask: Annotated[
-        str | None, typer.Argument(help="IP address mask, if not provided an auto generated one will be assigned.")
+        Optional[str], typer.Argument(help="IP address mask, if not provided an auto generated one will be assigned.")
     ] = None,
 ) -> bool:
     """Calculate the network address from an IP address and a subnet mask, output the address in the desired format."""
@@ -171,7 +171,7 @@ def subnet(  # type: ignore
     mask: Annotated[str, typer.Argument(help="IP address mask.")],
     parts: Annotated[int, typer.Argument(help="Split the netork into this parts.")],
     output: Annotated[
-        str | None,
+        Optional[str],
         typer.Option(
             "-o",
             "--output",
