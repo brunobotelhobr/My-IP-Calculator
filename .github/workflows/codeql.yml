@@ -1,6 +1,7 @@
 name: "SAST CodeQL"
 
 on:
+  workflow_dispatch:
   schedule:
     - cron: '39 3 * * 1'
 

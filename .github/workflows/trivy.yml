@@ -2,6 +2,7 @@
 name: "SCA Trivy"
 
 on:
+  workflow_dispatch:
   schedule:
     - cron: '39 3 * * 1'
 
