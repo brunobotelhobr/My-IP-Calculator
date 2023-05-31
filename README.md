@@ -157,7 +157,7 @@ my-ip-calculator val A -o hex
 └─────────┴───────┴─────────────────┴────────────┘
 `````
 
-### Netork (Net)
+### Network (Net)
 Usage: `my-ip-calculator net [OPTIONS] ADDRESS [MASK]`
 Calculate the network address from an IP address and a subnet mask, output the address in the desired format.
 if a mask isn't provided:
