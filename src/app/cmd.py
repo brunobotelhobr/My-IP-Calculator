@@ -219,9 +219,7 @@ def subnet(  # type: ignore
             Printer().error(name="mask", value=mask, message="Invalid mask")
             return False
     # Validate the mask
-    try:
-        Validator(address=mask, version=address_version).validate()
-    except ValueError:
+    if Validator(address=mask, version=address_version).validate() is False:
         Printer().error(name="mask", value=mask, message="Invalid mask")
         return False
     # Validate the split
@@ -232,11 +230,7 @@ def subnet(  # type: ignore
     if not log2(parts).is_integer():
         Printer().error(name="parts", value=str(parts), message="The parts must be base 2")
         return False
-    try:
-        mask = str(MaskCompress(mask=mask, version=address_version).compress())
-    except ValueError:
-        Printer().error(name="mask", value=mask, message="Invalid mask")
-        return False
+    mask = str(MaskCompress(mask=mask, version=address_version).compress())
     if address_version == 4:
         if int(mask) + parts > 32:
             Printer().error(name="parts", value=str(parts), message="The parts are too big for the mask")

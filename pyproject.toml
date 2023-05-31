@@ -116,7 +116,7 @@ package_version = "0.0.1"
 docker_context = "brunobotelhobr"
 
 [tool.taskipy.tasks]
-pre-commit = { cmd = "task format && task lint && task tests", help = "Run all pre-commit tasks" }
+pre-commit = { cmd = "task format && task lint && task test", help = "Run all pre-commit tasks" }
 pre-release = { cmd = "task pre-commit && task bom && task req &&  task sec", help = "Run all pre-release tasks" }
 ----------- = "----------------------------------------"
 info = { cmd = "poetry env info && poetry check && poetry show", help = "Show project info" }
