@@ -127,5 +127,4 @@ dmypy.json
 # MAC and VSCode
 .vscode/
 src/.DS_Store
-poetry.lock
 .DS_Store
