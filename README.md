@@ -28,7 +28,7 @@ You can use this tool in many ways:
 ### Install from Repository
 With this command, you PC will download the app from https://pypi.org/project/my-ip-calulator/0.4.0/:
 ````
-pip install my-ip-calculator
+pip install my-ip-calc
 ````
 
 [![asciicast](https://asciinema.org/a/585935.svg)](https://asciinema.org/a/585935)
