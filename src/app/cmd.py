@@ -24,7 +24,7 @@ cmd = typer.Typer(no_args_is_help=True)
 @cmd.command()
 def version() -> str:
     """Show version."""
-    app_version: str = "1.0.0"
+    app_version: str = "1.0.1"
     typer.echo(app_version)
     return app_version
 
@@ -94,6 +94,10 @@ def net(
     ] = None,
 ) -> bool:
     """Calculate the network address from an IP address and a subnet mask, output the address in the desired format."""
+    # Split the address and the mask
+    if "/" in address:
+        Printer().error(name="address", value=address, message="Address field can not contain a mask")
+        exit()
     # Identify the address type
     address_version: int = discover_version(address=address)
     # Return False if the address is invalid
@@ -182,6 +186,9 @@ def subnet(  # type: ignore
     ] = None,
 ) -> bool:
     """Split an IP address into network and host parts, output the address in the desired format."""
+    if "/" in address:
+        Printer().error(name="address", value=address, message="Address field can not contain a mask")
+        exit()
     # Identify the address type
     address_version: int = discover_version(address=address)
     # Return False if the address is invalid
