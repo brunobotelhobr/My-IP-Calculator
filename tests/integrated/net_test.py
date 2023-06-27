@@ -5,6 +5,7 @@ from app.cmd import net
 def test_net_happy() -> None:
     """Test net function, happy path."""
     assert net(address="10.10.10.10") is True
+    assert net(address="10.10.10.10/16") is True
     assert net(address="1.2.3.4", mask="8") is True
     assert net(address="1.2.3.4", mask="16") is True
     assert net(address="1.2.3.4", mask="24") is True
