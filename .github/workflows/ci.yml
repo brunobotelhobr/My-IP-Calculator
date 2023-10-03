@@ -11,12 +11,8 @@ on:
 jobs:
 
   Lint:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [ubuntu-latest]
+    runs-on: ubuntu-latest
     env:
-      OS: ${{ matrix.os }}
       PYTHON: '3.11'
     steps:
     - uses: actions/checkout@master
@@ -64,12 +60,8 @@ jobs:
         verbose: true      
         
   Security:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [ubuntu-latest]
+    runs-on: ubuntu-latest
     env:
-      OS: ${{ matrix.os }}
       PYTHON: '3.11'
     steps:
     - uses: actions/checkout@master
@@ -79,14 +71,14 @@ jobs:
         python-version: 3.11
     - name: Run Code Security Checks
       run: |
-        curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin v0.40.0
+        curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin v0.45.1
         curl -fsSL https://raw.githubusercontent.com/ZupIT/horusec/main/deployments/scripts/install.sh | bash -s latest
         pip install poetry
         poetry config virtualenvs.create false
         poetry install
-        #trivy fs --exit-code 1 --scanners vuln,config,secret ./src 
         bandit -c pyproject.toml -r src
         horusec start -D -p ./src
+        trivy fs --exit-code 1 --scanners vuln,config,secret . 
     - name: Run Container Security Checks
       run: |
         docker build -t test_img:ci-test .
