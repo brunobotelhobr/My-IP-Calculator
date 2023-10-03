@@ -85,7 +85,7 @@ jobs:
         poetry config virtualenvs.create false
         poetry install
         #trivy fs --exit-code 1 --scanners vuln,config,secret ./src 
-        #bandit -c pyproject.toml -r src
+        bandit -c pyproject.toml -r src
         horusec start -D -p ./src
     - name: Run Container Security Checks
       run: |
