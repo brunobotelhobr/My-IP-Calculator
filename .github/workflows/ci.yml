@@ -84,7 +84,9 @@ jobs:
         pip install poetry
         poetry config virtualenvs.create false
         poetry install
-        poetry run task sec
+        trivy fs --exit-code 1 --scanners vuln,config,secret . 
+        bandit -c pyproject.toml -r src
+        horusec start -D -p ./src
     - name: Run Container Security Checks
       run: |
         docker build -t test_img:ci-test .
