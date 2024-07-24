@@ -132,7 +132,7 @@ pypi-auth = { cmd = "echo 'Type PyPI API token:' && read -s PYPI_TOKEN && poetry
 pypi-pub = { cmd = "poetry publish", help = "Publish package to PyPI" }
 docker-list = { cmd = "echo 'Local docker image versions: ' && docker images {docker_context}/{package_name}", help = "List docker images" }
 docker-setup-builder = { cmd = "docker buildx create --use --platform=linux/arm64,linux/amd64 --name multi-platform-builder && docker buildx inspect --bootstrap", help = "Setup docker builder" }
-docker-test-build = { cmd = "docker buildx build --push --platform linux/amd64,linux/arm64 --no-cache -t {docker_context}/{package_name}:$APP_DV . && unset APP_DV", help = "Test Build docker image" }
+docker-test-build = { cmd = "docker buildx build --push --platform linux/amd64,linux/arm64 --no-cache -t test:test .", help = "Test Build docker image" }
 docker-local-build =      { cmd = "task docker-list && echo 'Type the tag to build:' && read APP_DV && docker buildx build --load -t {docker_context}/{package_name}:$APP_DV . && unset APP_DV", help = "Build docker image" }
 docker-sec-scan =   { cmd = "task docker-list && echo 'Type the tag to scan:' && read APP_DV && trivy image {docker_context}/{package_name}:$APP_DV . && unset APP_DV", help = "Scan a docker image looking for vulenrabilities" }
 docker-auth =       { cmd = "docker login", help = "Authenticate to Docker Hub"}
