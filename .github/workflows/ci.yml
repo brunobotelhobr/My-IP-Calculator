@@ -42,6 +42,7 @@ jobs:
         pip install poetry
         poetry config virtualenvs.create false
         poetry install
+        docker-setup-builder
         poetry run task docker-test-build
 
   Test-Code:
