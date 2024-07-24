@@ -1,4 +1,4 @@
-name: CI Github Actions
+name: CI
 on:
   workflow_dispatch:
   workflow_call:
