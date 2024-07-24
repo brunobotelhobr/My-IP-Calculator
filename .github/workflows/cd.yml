@@ -11,6 +11,24 @@ jobs:
   Call-CI:
     uses: ./.github/workflows/ci.yml
 
+  Deploy-Docs:
+    needs: Call-CI
+    runs-on: ubuntu-latest
+    env:
+      VERSION: ${{ github.event.inputs.version }}
+    steps:
+      - uses: actions/checkout@master
+      - name: Set up QEMU
+        run: |
+          pip install poetry
+          poetry config virtualenvs.create false
+          poetry install
+          mike deploy -b documentation $VERSION
+          mike set-default -b documentation $VERSION 
+          mike alias -b documentation -u $VERSION latest 
+          python3 scripts/update-doc.py $VERSION
+
+
   Deploy-DockerHub:
     needs: Call-CI
     runs-on: ubuntu-latest

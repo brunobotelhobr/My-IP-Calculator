@@ -73,7 +73,34 @@ jobs:
         flags: unittests
         name: codecov-umbrella
         verbose: true      
-  
+
+  Report-Test-Coverage:
+    runs-on: ubuntu-latest
+    needs: Test-Code
+    steps:
+    - uses: actions/checkout@master
+    - name: Setup Python
+      uses: actions/setup-python@master
+      with:
+        python-version: 3.11
+    - name: Generate coverage report
+      run: |
+        pip install poetry
+        poetry config virtualenvs.create false
+        poetry install
+        pytest --cov=src --cov-report=xml
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v4
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        directory: ./coverage/reports/
+        env_vars: OS,PYTHON
+        fail_ci_if_error: true
+        files: ./coverage.xml
+        flags: unittests
+        name: codecov-umbrella
+        verbose: true  
+        
   Test-Security:
     runs-on: ubuntu-latest
     env:
