@@ -27,7 +27,24 @@ jobs:
         poetry install
         poetry run task lint
 
-  Test:
+  Test-Docker:
+    runs-on: ubuntu-latest
+    env:
+      PYTHON: '3.11'
+    steps:
+    - uses: actions/checkout@master
+    - name: Setup Python
+      uses: actions/setup-python@master
+      with:
+        python-version: 3.11
+    - name: Generate lint
+      run: |
+        pip install poetry
+        poetry config virtualenvs.create false
+        poetry install
+        poetry run task docker-test-build
+
+  Test-Code:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -58,8 +75,8 @@ jobs:
         flags: unittests
         name: codecov-umbrella
         verbose: true      
-        
-  Security:
+  
+  Test-Security:
     runs-on: ubuntu-latest
     env:
       PYTHON: '3.11'
