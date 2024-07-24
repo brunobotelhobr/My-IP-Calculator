@@ -52,7 +52,6 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.black]
 line_length = 120
-ignore = "E203"
 
 [tool.isort]
 line_length = 120
