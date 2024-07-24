@@ -23,6 +23,14 @@ cmd = typer.Typer(no_args_is_help=True)
 
 
 @cmd.command()
+def inspiration() -> str:
+    """Have an Inspiration."""
+    inspiration: str = "Work hard beat talent when talent doesn't work hard"
+    typer.echo(inspiration)
+    return inspiration
+
+
+@cmd.command()
 def version() -> str:
     """Show version."""
     app_version: str = "1.0.6"
