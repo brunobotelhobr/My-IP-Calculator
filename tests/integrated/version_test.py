@@ -1,4 +1,5 @@
 """Tests to the version module."""
+
 from app.cmd import version
 
 

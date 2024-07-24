@@ -1,4 +1,5 @@
 """Tests to the cmd module."""
+
 import typer
 
 from app.cmd import cmd

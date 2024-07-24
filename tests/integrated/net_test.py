@@ -1,4 +1,5 @@
 """Tests to the net module."""
+
 from app.cmd import net
 
 

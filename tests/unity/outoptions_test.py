@@ -1,4 +1,5 @@
 """Tests to the OutputOptions module."""
+
 from app.calc import OutputOptions
 
 

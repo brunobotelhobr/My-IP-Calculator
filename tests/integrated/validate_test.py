@@ -1,4 +1,5 @@
 """Tests to the validate module."""
+
 from app.cmd import val
 
 

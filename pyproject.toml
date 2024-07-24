@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "my-ip-calulator"
-version = "1.0.5"
+version = "1.0.6"
 license = "MIT"
 description = "This is an IPv4 and IPv6 calculator. It can validate IP address, convert then and also do net and subnet calculations."
 authors = ["Bruno Botelho <bruno.botelho.br@gmail.com>"]
@@ -21,7 +21,7 @@ rich = "^13.3.5"
 
 [tool.poetry.group.dev.dependencies]
 flake8-pyproject = "^1.2.3"
-black = ">=23.3,<25.0"
+black = "^24.3.0"
 isort = "^5.12.0"
 flake8 = "^6.0.0"
 pylint = "^2.17.2"
@@ -122,7 +122,7 @@ pre-release = { cmd = "task pre-commit && task bom && task req &&  task sec", he
 info = { cmd = "poetry env info && poetry check && poetry show", help = "Show project info" }
 meta = { cmd = "python scripts/update-project-properties.py", help = "Update project properties" }
 upgrade = { cmd = "poetry self update && poetry update && task bom && task req", help = "Upgrade all dependencies" }
-sec = { cmd = "trivy fs --exit-code 1 --scanners vuln,config,secret . && bandit -c pyproject.toml -r src && horusec start -D -p ./src", help = "Run all security checks" }
+sec = { cmd = "trivy fs --exit-code 1 --scanners vuln,config,secret . && bandit -c pyproject.toml -r src && horusec start -p ./src", help = "Run all security checks" }
 format = { cmd = "echo 'Running IsSort' && isort --settings-path pyproject.toml src && isort --settings-path pyproject.toml tests && echo 'Running Black' && black --config ./pyproject.toml src && black --config ./pyproject.toml tests  && echo 'Running Autoflake' && autoflake --recursive src && autoflake --recursive tests", help = "Run all formaters" }
 lint = { cmd = "echo 'Running Flake' && flake8 --toml-config pyproject.toml src && flake8 --toml-config pyproject.toml tests && echo 'Running MyPy' && mypy --config-file pyproject.toml src && mypy --config-file pyproject.toml tests && echo 'Running PyLint' &&  pylint --rcfile pyproject.toml src && pylint --rcfile pyproject.toml tests", help = "Run all linters" }
 bom = { cmd = "cyclonedx-py -p --format xml -F -o meta/bom/bom.xml && cyclonedx-py -p --format json -F -o meta/bom/bom.json", help = "Generate BOM" }
@@ -132,11 +132,12 @@ pypi-build = { cmd = "poetry build", help = "Build package for PyPI" }
 pypi-auth = { cmd = "echo 'Type PyPI API token:' && read -s PYPI_TOKEN && poetry config pypi-token.pypi $PYPI_TOKEN && unset PYPI_TOKEN", help = "Authenticate to PyPI"}
 pypi-pub = { cmd = "poetry publish", help = "Publish package to PyPI" }
 docker-list = { cmd = "echo 'Local docker image versions: ' && docker images {docker_context}/{package_name}", help = "List docker images" }
-docker-build = { cmd = "task docker-list && echo 'Type the tag to build:' && read APP_DV && docker build -t {docker_context}/{package_name}:$APP_DV . && unset APP_DV", help = "Build docker image" }
-docker-sec-scan = { cmd = "task docker-list && echo 'Type the tag to scan:' && read APP_DV && trivy image {docker_context}/{package_name}:$APP_DV . && unset APP_DV", help = "Scan a docker image looking for vulenrabilities" }
-docker-auth = { cmd = "docker login", help = "Authenticate to Docker Hub"}
-docker-latest = { cmd = "task docker-list && echo 'Type the tag to tag as latest:' && read APP_DV && docker tag {docker_context}/{package_name}:$APP_DV {docker_context}/{package_name}:latest && unset APP_DV", help = "Tag a docker image as latest" }
-docker-pub = { cmd = "task docker-list && echo 'Type the tag to build:' && read APP_DV && docker push {docker_context}/{package_name}:$APP_DV && unset APP_DV", help = "Publish docker image to Docker Hub" }
+docker-setup-builder = { cmd = "docker buildx create --use --platform=linux/arm64,linux/amd64 --name multi-platform-builder && docker buildx inspect --bootstrap", help = "Setup docker builder" }
+docker-test-build = { cmd = "docker buildx build --push --platform linux/amd64,linux/arm64 --no-cache -t {docker_context}/{package_name}:$APP_DV . && unset APP_DV", help = "Test Build docker image" }
+docker-local-build =      { cmd = "task docker-list && echo 'Type the tag to build:' && read APP_DV && docker buildx build --load -t {docker_context}/{package_name}:$APP_DV . && unset APP_DV", help = "Build docker image" }
+docker-sec-scan =   { cmd = "task docker-list && echo 'Type the tag to scan:' && read APP_DV && trivy image {docker_context}/{package_name}:$APP_DV . && unset APP_DV", help = "Scan a docker image looking for vulenrabilities" }
+docker-auth =       { cmd = "docker login", help = "Authenticate to Docker Hub"}
+docker-publish = { cmd = "task docker-list && echo 'Type the tag to build:' && read APP_DV && docker buildx build -t {docker_context}/{package_name}:$APP_DV -t {docker_context}/{package_name}:latest --push --no-cache --platform linux/amd64,linux/arm64 .", help = "Publish docker image to Docker Hub" }
 docs = { cmd = "mike serve -b {docs_branch}", help = "Run docs server" }
 docs-list = { cmd = "mike list -b {docs_branch}", help = "List docs versions" }
 docs-build = { cmd = "echo 'Acutal versions: '&& task docs-list && echo 'Type the new version to create:' && read DOCUMENTS_VERSION && mike deploy -b {docs_branch} $DOCUMENTS_VERSION", help = "Add a new version to docs" }
@@ -145,5 +146,3 @@ docs-latest = { cmd = "echo 'Acutal versions: '&& task docs-list && echo 'Type t
 docs-purge = { cmd = "mike delete --all -b {docs_branch}", help = "Purge all versions of the docs." }
 docs-pub = { cmd = "python scripts/update-doc.py {docs_branch}", help = "Publish documentation to the doc branch on GitHub." }
 clean = { cmd = "rm -rf .venv && rm -rf .pytest_cache && rm -rf .coverage && rm -rf dist && rm -rf site && find . -type d -name __pycache__ | xargs rm -rf > /dev/null", help = "Clean all generated files" }
-
-
