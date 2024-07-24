@@ -25,7 +25,7 @@ cmd = typer.Typer(no_args_is_help=True)
 @cmd.command()
 def version() -> str:
     """Show version."""
-    app_version: str = "1.0.5"
+    app_version: str = "1.0.6"
     typer.echo(app_version)
     return app_version
 
