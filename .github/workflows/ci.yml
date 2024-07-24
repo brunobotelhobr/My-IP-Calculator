@@ -1,6 +1,7 @@
 name: CI Github Actions
 on:
   workflow_dispatch:
+  workflow_call:
   push:
     branches:
       - main
