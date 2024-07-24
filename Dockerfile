@@ -8,7 +8,7 @@ RUN mkdir /code
 RUN adduser -D -h /code -s /bin/bash app 
 
 # install gcc
-RUN apk update && apk add python3-dev gcc libc-dev libffi-dev
+RUN apk update && apk add --no-cache python3-dev gcc libc-dev libffi-dev
 
 # Install dependencies
 RUN pip install --upgrade pip
