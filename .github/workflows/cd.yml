@@ -1,4 +1,4 @@
-name: CD
+name: CD-Continuous-Deployment
 on:
   workflow_dispatch:
     inputs:
@@ -33,7 +33,7 @@ jobs:
           poetry install
           export APPVERSION=$(python3 src/app/cmd.py version)
           if [[ $APPVERSION != $VERSION ]]; then
-            echo "Version in code is not the same as the one in the release"
+            echo "Version in code ($APPVERSION) is NOT the same as the one in the Action Release ($VERSION)"
             exit 1
           fi
           echo "Version in code ($APPVERSION) is the same as the one in the release ($VERSION)"

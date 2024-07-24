@@ -1,4 +1,4 @@
-name: CI
+name: CI-Continuous-Integration
 on:
   workflow_dispatch:
   workflow_call:
