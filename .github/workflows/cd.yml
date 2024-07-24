@@ -51,8 +51,10 @@ jobs:
     env:
       VERSION: ${{ github.event.inputs.version }}
     steps:
+      - name: Setup Python
+        uses: actions/setup-python@master
       - uses: actions/checkout@master
-      - name: Set up QEMU
+      - name: Set up Documentation
         run: |
           pip install poetry
           poetry config virtualenvs.create false

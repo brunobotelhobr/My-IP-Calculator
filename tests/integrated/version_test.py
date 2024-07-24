@@ -5,4 +5,4 @@ from app.cmd import version
 
 def test_version() -> None:
     """Test version."""
-    assert version() == "1.0.6"
+    assert version() == "1.0.8"
