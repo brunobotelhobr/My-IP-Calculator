@@ -33,7 +33,7 @@ def inspiration() -> str:
 @cmd.command()
 def version() -> str:
     """Show version."""
-    app_version: str = "1.0.8"
+    app_version: str = "1.0.9"
     typer.echo(app_version)
     return app_version
 

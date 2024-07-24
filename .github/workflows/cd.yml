@@ -44,27 +44,6 @@ jobs:
     secrets:
       CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
   
-
-  Deploy-Docs:
-    needs: [Call-CI, Version-Check]
-    runs-on: ubuntu-latest
-    env:
-      VERSION: ${{ github.event.inputs.version }}
-    steps:
-      - name: Setup Python
-        uses: actions/setup-python@master
-      - uses: actions/checkout@master
-      - name: Set up Documentation
-        run: |
-          pip install poetry
-          poetry config virtualenvs.create false
-          poetry install
-          mike deploy -b documentation $VERSION
-          mike set-default -b documentation $VERSION 
-          mike alias -b documentation -u $VERSION latest 
-          python3 scripts/update-doc.py $VERSION
-
-
   Deploy-DockerHub:
     needs: [Call-CI, Version-Check]
     runs-on: ubuntu-latest
