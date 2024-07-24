@@ -37,13 +37,9 @@ jobs:
       uses: actions/setup-python@master
       with:
         python-version: 3.11
-    - name: Generate lint
+    - name: Build
       run: |
-        pip install poetry
-        poetry config virtualenvs.create false
-        poetry install
-        docker-setup-builder
-        poetry run task docker-test-build
+        docker build -t test_img:ci-test .
 
   Test-Code:
     runs-on: ${{ matrix.os }}
