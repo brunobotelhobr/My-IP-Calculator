@@ -26,12 +26,21 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_PASS }}
-
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          # list of Docker images to use as base name for tags
+          images: |
+            brunobotelhobr/my-ip-calculator
+        # generate Docker tags for the images, altest and version
+            tags: |
+              latest
+              ${{ github.event.inputs.version }}
+           
       - name: Build and push
         uses: docker/build-push-action@v6
         with:
           platforms: linux/amd64,linux/arm64
           push: true
-          tags: 
-            - "brunobotelhobr/my-ip-calulator:latest"
-            - "brunobotelhobr/my-ip-calulator:${{ github.event.inputs.version }}"
+          tags: ${{ steps.meta.outputs.tags }}
