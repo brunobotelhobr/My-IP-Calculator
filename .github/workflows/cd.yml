@@ -12,6 +12,7 @@ jobs:
     uses: ./.github/workflows/ci.yml
 
   Deploy-DockerHub:
+    needs: Call-CI
     runs-on: ubuntu-latest
     steps:
       - name: Set up QEMU
@@ -25,12 +26,12 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_PASS }}
-      
+
       - name: Build and push
         uses: docker/build-push-action@v6
         with:
           platforms: linux/amd64,linux/arm64
           push: true
           tags: 
-            - brunobotelhobr/my-ip-calulator:latest
-            - brunobotelhobr/my-ip-calulator:${{ github.event.inputs.version }}
+            - "brunobotelhobr/my-ip-calulator:latest"
+            - "brunobotelhobr/my-ip-calulator:${{ github.event.inputs.version }}"
