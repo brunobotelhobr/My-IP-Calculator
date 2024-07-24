@@ -13,8 +13,11 @@ jobs:
     runs-on: ubuntu-latest
     env:
       VERSION: ${{ github.event.inputs.version }}
+      PYTHON: '3.11'
     steps:
       - uses: actions/checkout@master
+      - name: Setup Python
+        uses: actions/setup-python@master
       - name: Vesion Check
         run: |
           # Regex to fech if it is in format 1.2.12
@@ -33,7 +36,7 @@ jobs:
             echo "Version in code is not the same as the one in the release"
             exit 1
           fi
-          echo "Version in code is the same as the one in the release"
+          echo "Version in code ($APPVERSION) is the same as the one in the release ($VERSION)"
 
   Call-CI:
     needs: [Version-Check]
