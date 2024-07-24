@@ -1,4 +1,5 @@
 """Tests to the Printer module."""
+
 from app.calc import Network, Printer
 
 

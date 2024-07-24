@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "my-ip-calulator"
-version = "1.0.5"
+version = "1.0.6"
 license = "MIT"
 description = "This is an IPv4 and IPv6 calculator. It can validate IP address, convert then and also do net and subnet calculations."
 authors = ["Bruno Botelho <bruno.botelho.br@gmail.com>"]
@@ -21,7 +21,7 @@ rich = "^13.3.5"
 
 [tool.poetry.group.dev.dependencies]
 flake8-pyproject = "^1.2.3"
-black = "^23.3.0"
+black = "^24.3.0"
 isort = "^5.12.0"
 flake8 = "^6.0.0"
 pylint = "^2.17.2"
@@ -122,7 +122,7 @@ pre-release = { cmd = "task pre-commit && task bom && task req &&  task sec", he
 info = { cmd = "poetry env info && poetry check && poetry show", help = "Show project info" }
 meta = { cmd = "python scripts/update-project-properties.py", help = "Update project properties" }
 upgrade = { cmd = "poetry self update && poetry update && task bom && task req", help = "Upgrade all dependencies" }
-sec = { cmd = "trivy fs --exit-code 1 --scanners vuln,config,secret . && bandit -c pyproject.toml -r src && horusec start -D -p ./src", help = "Run all security checks" }
+sec = { cmd = "trivy fs --exit-code 1 --scanners vuln,config,secret . && bandit -c pyproject.toml -r src && horusec start -p ./src", help = "Run all security checks" }
 format = { cmd = "echo 'Running IsSort' && isort --settings-path pyproject.toml src && isort --settings-path pyproject.toml tests && echo 'Running Black' && black --config ./pyproject.toml src && black --config ./pyproject.toml tests  && echo 'Running Autoflake' && autoflake --recursive src && autoflake --recursive tests", help = "Run all formaters" }
 lint = { cmd = "echo 'Running Flake' && flake8 --toml-config pyproject.toml src && flake8 --toml-config pyproject.toml tests && echo 'Running MyPy' && mypy --config-file pyproject.toml src && mypy --config-file pyproject.toml tests && echo 'Running PyLint' &&  pylint --rcfile pyproject.toml src && pylint --rcfile pyproject.toml tests", help = "Run all linters" }
 bom = { cmd = "cyclonedx-py -p --format xml -F -o meta/bom/bom.xml && cyclonedx-py -p --format json -F -o meta/bom/bom.json", help = "Generate BOM" }

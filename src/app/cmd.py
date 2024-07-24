@@ -1,4 +1,5 @@
 """Main module for the app package, it contains the cmd utility."""
+
 from math import log2
 from typing import Annotated, List, Optional
 

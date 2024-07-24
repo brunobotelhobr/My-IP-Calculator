@@ -1,4 +1,5 @@
 """Tests to the MaskGenerator module."""
+
 import pytest
 
 from app.calc import MaskGenerator

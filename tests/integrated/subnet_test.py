@@ -1,4 +1,5 @@
 """Tests to the subnet module."""
+
 from app.cmd import subnet
 
 

@@ -1,4 +1,5 @@
 """Tests to the Validator module."""
+
 import pytest
 
 from app.calc import Validator

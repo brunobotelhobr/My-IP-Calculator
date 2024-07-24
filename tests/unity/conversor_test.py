@@ -1,4 +1,5 @@
 """Test module for Conversor class."""
+
 import pytest
 
 from app.calc import Conversor

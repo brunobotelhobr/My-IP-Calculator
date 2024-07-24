@@ -1,4 +1,5 @@
 """Tests to the NetworkCalculator module."""
+
 import pytest
 
 from app.calc import NetworkCalculator
